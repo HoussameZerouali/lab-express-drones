@@ -1,11 +1,30 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
+const MONGO_URI = "mongodb://localhost/lab-express-drones";
 
 // require the Drone model here
+const droneModel = require("../models/Drone.model")
 
 router.get('/drones', (req, res, next) => {
   // Iteration #2: List the drones
-  // ... your code here
+  mongoose.connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+  }).then(() => {
+    return droneModel.find();
+  }).then((droneDocuments) => {
+    res.render("drones/list", {
+      drones: droneDocuments
+    })
+  }).catch((error) => {
+    console.log(error)
+  })
+  .catch((error) => {
+    console.log(error)
+  })
 });
 
 router.get('/drones/create', (req, res, next) => {
